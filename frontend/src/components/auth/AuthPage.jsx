@@ -258,10 +258,6 @@ export default function AuthPage() {
           </div>
         )}
 
-        {(mode === 'login' || mode === 'register') && !googleClientId && (
-          <p className="auth-form__hint">Add VITE_GOOGLE_CLIENT_ID to enable Sign in with Google.</p>
-        )}
-
         {(mode === 'forgot' || mode === 'reset') && (
           <button type="button" className="auth-form__back" onClick={() => switchMode('login')}>
             Back to Sign In
