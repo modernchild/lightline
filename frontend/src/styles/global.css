@@ -1320,6 +1320,7 @@ input, textarea, select { font-family: inherit; }
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-md);
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   margin: 0;
 }
