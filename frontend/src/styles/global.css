@@ -250,6 +250,10 @@ input, textarea, select { font-family: inherit; }
   color: var(--navy);
   box-shadow: var(--shadow-sm);
 }
+/* Day mode: make inactive button text darker for visibility */
+[data-theme="day"] .theme-toggle__option {
+  color: var(--text-secondary);
+}
 [data-theme="night"] .theme-toggle__option--active {
   color: var(--text-primary);
 }
