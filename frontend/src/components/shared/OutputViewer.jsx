@@ -2,6 +2,7 @@
 // Renders streamed markdown output
 import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'
+import LoadingSpinner from './LoadingSpinner'
 
 export default function OutputViewer({ content, meta, streaming, onReset }) {
   const [copied, setCopied] = useState(false)
@@ -29,7 +30,11 @@ export default function OutputViewer({ content, meta, streaming, onReset }) {
       </div>
 
       <div style={styles.content} className="markdown-output">
-        <ReactMarkdown>{content || (streaming ? '_Waiting for first tokens..._' : '')}</ReactMarkdown>
+        {streaming && !content ? (
+          <LoadingSpinner message="Generating..." size="medium" />
+        ) : (
+          <ReactMarkdown>{content || (streaming ? '_Waiting for first tokens..._' : '')}</ReactMarkdown>
+        )}
       </div>
     </div>
   )
