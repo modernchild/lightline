@@ -341,10 +341,10 @@ input, textarea, select { font-family: inherit; }
   background: rgba(255,255,255,0.1);
   border-color: rgba(255,255,255,0.15);
 }
-.app-header__theme-mobile .theme-toggle__option { color: rgba(255,255,255,0.6); }
+.app-header__theme-mobile .theme-toggle__option { color: var(--gold-light); }
 .app-header__theme-mobile .theme-toggle__option--active {
   background: rgba(255,255,255,0.2);
-  color: #fff;
+  color: var(--gold-light);
 }
 .app-header__menu-btn {
   display: none;
