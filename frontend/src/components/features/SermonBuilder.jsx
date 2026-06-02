@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import PageLayout from '../shared/PageLayout'
 import OutputViewer from '../shared/OutputViewer'
+import LoadingSpinner from '../shared/LoadingSpinner'
 import { Field, Input, Textarea, Select } from '../shared/FormField'
 import { generateApi } from '../../services/api'
 
@@ -156,7 +157,9 @@ export default function SermonBuilder() {
       {mode === 'quick' ? (
         // QUICK MODE — Standard form + output
         <>
-          {!currentOutput ? (
+          {loading && !currentOutput ? (
+            <LoadingSpinner message="Crafting your sermon..." size="medium" />
+          ) : !currentOutput ? (
             <form onSubmit={handleSubmit} className="feature-form">
               <Field label="Topic or Title *" hint="e.g. The Grace of God, Walking in Faith, Identity in Christ">
                 <Input
@@ -210,11 +213,7 @@ export default function SermonBuilder() {
               {error && <p className="feature-form__error">{error}</p>}
 
               <button type="submit" className="feature-form__submit" disabled={loading}>
-                {loading ? (
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center' }}>
-                    <Spinner /> Preparing your sermon…
-                  </span>
-                ) : '⚡ Generate Sermon'}
+                ⚡ Generate Sermon
               </button>
             </form>
           ) : (
@@ -232,8 +231,11 @@ export default function SermonBuilder() {
         // DEEP MODE — Multi-step interactive interface
         <>
           {!hasStartedDeep ? (
-            // Initial setup form
-            <form onSubmit={handleSubmit} className="feature-form">
+            <>
+              {loading ? (
+                <LoadingSpinner message="Setting up your preparation steps..." size="medium" />
+              ) : (
+                <form onSubmit={handleSubmit} className="feature-form">
               <Field label="Topic or Title *" hint="e.g. The Grace of God, Walking in Faith, Identity in Christ">
                 <Input
                   name="topic"
@@ -276,13 +278,11 @@ export default function SermonBuilder() {
               {error && <p className="feature-form__error">{error}</p>}
 
               <button type="submit" className="feature-form__submit" disabled={loading}>
-                {loading ? (
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center' }}>
-                    <Spinner /> Starting deep preparation…
-                  </span>
-                ) : '🚀 Begin Deep Preparation'}
+                🚀 Begin Deep Preparation
               </button>
             </form>
+              )}
+            </>
           ) : (
             // Multi-step progression interface
             <div className="sermon-deep-container">
@@ -356,7 +356,9 @@ export default function SermonBuilder() {
 
                 {/* Current step output */}
                 <div className="sermon-deep-output">
-                  {currentOutput ? (
+                  {loading && !currentOutput ? (
+                    <LoadingSpinner message={`Generating ${DEEP_STEPS.find(s => s.value === deepStep)?.label.split('—')[0]}...`} size="medium" />
+                  ) : currentOutput ? (
                     <OutputViewer content={currentOutput} meta={currentMeta} streaming={loading} />
                   ) : (
                     <div className="sermon-deep-empty">
@@ -412,11 +414,7 @@ export default function SermonBuilder() {
                     className="sermon-deep-nav-btn sermon-deep-nav-generate"
                     disabled={loading || !form.topic}
                   >
-                    {loading ? (
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                        <Spinner /> Generating…
-                      </span>
-                    ) : currentOutput ? (
+                    {currentOutput ? (
                       <>🔄 Regenerate</>
                     ) : (
                       <>→ Generate {DEEP_STEPS.find(s => s.value === deepStep)?.label.split('—')[0]}...</>
@@ -437,18 +435,6 @@ export default function SermonBuilder() {
         </>
       )}
     </PageLayout>
-  )
-}
-
-function Spinner() {
-  return (
-    <span style={{
-      display: 'inline-block', width: 14, height: 14,
-      border: '2px solid rgba(255,255,255,0.3)',
-      borderTopColor: 'white',
-      borderRadius: '50%',
-      animation: 'spin 0.7s linear infinite',
-    }} />
   )
 }
 
