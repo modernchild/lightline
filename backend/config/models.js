@@ -5,17 +5,17 @@
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 // Global fallback when both primary and feature fallback fail
-const GLOBAL_FALLBACK = process.env.OPENROUTER_GLOBAL_FALLBACK || 'google/gemini-2.0-flash-001';
+const GLOBAL_FALLBACK = process.env.OPENROUTER_GLOBAL_FALLBACK || 'meta-llama/llama-3.3-70b-instruct';
 
 const FEATURE_MODELS = {
   sermon: {
-    primary: 'anthropic/claude-sonnet-4',
-    fallback: 'anthropic/claude-sonnet-4.5',
+    primary: 'meta-llama/llama-3.3-70b-instruct',
+    fallback: 'anthropic/claude-sonnet-4',
     maxTokens: 3000,
   },
   devotional: {
-    primary: 'anthropic/claude-sonnet-4',
-    fallback: 'anthropic/claude-sonnet-4.5',
+    primary: 'meta-llama/llama-3.3-70b-instruct',
+    fallback: 'anthropic/claude-sonnet-4',
     maxTokens: 1500,
   },
   whatsapp: {
@@ -29,18 +29,18 @@ const FEATURE_MODELS = {
     maxTokens: 1500,
   },
   'bible-study': {
-    primary: 'anthropic/claude-sonnet-4',
-    fallback: 'anthropic/claude-sonnet-4.5',
+    primary: 'meta-llama/llama-3.3-70b-instruct',
+    fallback: 'anthropic/claude-sonnet-4',
     maxTokens: 2500,
   },
   prayer: {
-    primary: 'anthropic/claude-sonnet-4',
-    fallback: 'anthropic/claude-sonnet-4.5',
+    primary: 'meta-llama/llama-3.3-70b-instruct',
+    fallback: 'anthropic/claude-sonnet-4',
     maxTokens: 1200,
   },
   evangelism: {
-    primary: 'anthropic/claude-sonnet-4',
-    fallback: 'anthropic/claude-sonnet-4.5',
+    primary: 'meta-llama/llama-3.3-70b-instruct',
+    fallback: 'anthropic/claude-sonnet-4',
     maxTokens: 2000,
   },
   evaluation: {
