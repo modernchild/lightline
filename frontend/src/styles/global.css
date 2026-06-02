@@ -1630,3 +1630,55 @@ input, textarea, select { font-family: inherit; }
   border-color: var(--gold-dim);
   color: var(--text-primary);
 }
+
+/* -- Loading Spinner -------------------------- */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 40px 20px;
+}
+
+.loading-spinner__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.5s ease-out;
+}
+
+.loading-spinner__svg {
+  color: var(--gold);
+  filter: drop-shadow(0 0 8px rgba(201, 146, 42, 0.3));
+}
+
+.loading-spinner__arc {
+  stroke-dashoffset: 0;
+  animation: spin 2s linear infinite;
+  transform-origin: 12px 12px;
+}
+
+.loading-spinner__message {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.loading-spinner__dots {
+  display: inline-block;
+  width: 16px;
+  text-align: left;
+}
+
+[data-theme="night"] .loading-spinner__svg {
+  color: var(--gold-light);
+  filter: drop-shadow(0 0 8px rgba(232, 200, 120, 0.3));
+}
+
+[data-theme="night"] .loading-spinner__message {
+  color: var(--text-primary);
+}
