@@ -4,24 +4,53 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Content Security Policy — updated to allow service worker and manifest -->
+    <!-- Content Security Policy -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://lightline-backend-production.up.railway.app https://api.openrouter.ai; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://accounts.google.com;" />
 
-    <!-- PWA manifest -->
+    <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Theme colour for Android chrome address bar -->
+    <!-- Theme colour — Android status bar and task switcher -->
     <meta name="theme-color" content="#96680E" />
 
-    <!-- iOS PWA support -->
+    <!-- PWA installability — standard Chrome/Android -->
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- PWA installability — iOS Safari -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Lightline" />
 
+    <!-- iOS home screen icon — matches actual filename in public/icons/ -->
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png" />
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+    <link rel="shortcut icon" href="/icons/favicon.ico" />
+
+    <!-- App identity -->
     <title>Lightline — AI Ministry Companion</title>
     <meta name="description" content="Every minister. Every message. Every time." />
+    <meta name="application-name" content="Lightline" />
+    <meta name="author" content="Longji Sati — @Modernchild360" />
 
-    <!-- Fonts — unchanged -->
+    <!-- Open Graph — controls how link looks when shared on WhatsApp, Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Lightline — AI Ministry Companion" />
+    <meta property="og:description" content="Every minister. Every message. Every time." />
+    <meta property="og:url" content="https://lightline-frontend.vercel.app" />
+    <meta property="og:site_name" content="Lightline" />
+    <meta property="og:image" content="https://lightline-frontend.vercel.app/icons/web-app-manifest-512x512.png" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Lightline — AI Ministry Companion" />
+    <meta name="twitter:description" content="Every minister. Every message. Every time." />
+    <meta name="twitter:creator" content="@Modernchild360" />
+    <meta name="twitter:image" content="https://lightline-frontend.vercel.app/icons/web-app-manifest-512x512.png" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
@@ -30,13 +59,17 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Register Service Worker -->
+    <!-- Service Worker Registration -->
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('Lightline SW registered:', reg.scope))
-            .catch(err => console.warn('Lightline SW registration failed:', err));
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(function(reg) {
+              console.log('Lightline SW registered. Scope:', reg.scope);
+            })
+            .catch(function(err) {
+              console.warn('Lightline SW registration failed:', err);
+            });
         });
       }
     </script>
