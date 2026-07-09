@@ -27,7 +27,7 @@ const upload = multer({
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Only image files are allowed'));
+      cb(new Error('Please upload a valid image file (JPG, PNG, GIF, or WebP).'));
     }
   },
 });
@@ -39,11 +39,11 @@ const upload = multer({
 router.post('/avatar', authenticateToken, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: 'No file provided.' });
+      return res.status(400).json({ error: 'Please select an image to upload.' });
     }
 
     if (!CloudinaryService.isConfigured()) {
-      return res.status(503).json({ error: 'File upload service is not configured.' });
+      return res.status(503).json({ error: 'Image upload is temporarily unavailable. Please try again later.' });
     }
 
     const userId = req.user.id;
@@ -62,7 +62,7 @@ router.post('/avatar', authenticateToken, upload.single('file'), async (req, res
     });
   } catch (err) {
     console.error('[Upload Error]', err);
-    res.status(500).json({ error: err.message || 'Upload failed.' });
+    res.status(500).json({ error: 'We couldn\'t upload your image. Please check the file size (max 5MB) and try again.' });
   }
 });
 
@@ -77,7 +77,7 @@ router.delete('/avatar', authenticateToken, async (req, res) => {
     // Get current user
     const user = await UserStore.findById(userId);
     if (!user?.avatar_url) {
-      return res.status(404).json({ error: 'No avatar to delete.' });
+      return res.status(404).json({ error: 'You don\'t have an image to remove yet.' });
     }
 
     // Extract public ID from Cloudinary URL and delete
@@ -92,7 +92,7 @@ router.delete('/avatar', authenticateToken, async (req, res) => {
     res.json({ message: 'Avatar deleted successfully.' });
   } catch (err) {
     console.error('[Delete Avatar Error]', err);
-    res.status(500).json({ error: err.message || 'Failed to delete avatar.' });
+    res.status(500).json({ error: 'We couldn\'t remove your image. Please try again.' });
   }
 });
 

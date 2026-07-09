@@ -30,10 +30,10 @@ router.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Name, email, and password are required.' });
+      return res.status(400).json({ error: 'Please enter your name, email, and password.' });
     }
     if (password.length < 8) {
-      return res.status(400).json({ error: 'Password must be at least 8 characters.' });
+      return res.status(400).json({ error: 'Your password must be at least 8 characters long for security.' });
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: 'Please enter a valid email address.' });
@@ -52,7 +52,7 @@ router.post('/register', async (req, res) => {
       return res.status(409).json({ error: err.message });
     }
     console.error('[Register Error]', err);
-    res.status(500).json({ error: 'Registration failed. Please try again.' });
+    res.status(500).json({ error: 'We couldn\'t create your account. Please check your details and try again.' });
   }
 });
 
@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required.' });
+      return res.status(400).json({ error: 'Please enter your email and password.' });
     }
 
     const user = await UserStore.findAndVerify({ email, password });
@@ -78,7 +78,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (err) {
     console.error('[Login Error]', err);
-    res.status(500).json({ error: 'Login failed. Please try again.' });
+    res.status(500).json({ error: 'Sign in didn\'t work. Please try again or contact support.' });
   }
 });
 
@@ -86,10 +86,10 @@ router.post('/google', async (req, res) => {
   try {
     const { credential } = req.body;
     if (!credential) {
-      return res.status(400).json({ error: 'Google credential is required.' });
+      return res.status(400).json({ error: 'Unable to complete Google sign-in. Please try again.' });
     }
     if (!process.env.GOOGLE_CLIENT_ID) {
-      return res.status(503).json({ error: 'Google sign-in is not configured on the server.' });
+      return res.status(503).json({ error: 'Google sign-in is temporarily unavailable. Please use another sign-in method.' });
     }
 
     const ticket = await googleClient.verifyIdToken({
@@ -98,7 +98,7 @@ router.post('/google', async (req, res) => {
     });
     const payload = ticket.getPayload();
     if (!payload?.email) {
-      return res.status(401).json({ error: 'Google account email is unavailable.' });
+      return res.status(401).json({ error: 'Unable to retrieve email from your Google account. Please try another account.' });
     }
 
     const user = await UserStore.findOrCreateGoogle({
@@ -117,7 +117,7 @@ router.post('/google', async (req, res) => {
     });
   } catch (err) {
     console.error('[Google Auth Error]', err);
-    res.status(401).json({ error: 'Google sign-in failed. Please try again.' });
+    res.status(401).json({ error: 'Google sign-in didn\'t work this time. Please try again or use another sign-in method.' });
   }
 });
 
@@ -125,7 +125,7 @@ router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ error: 'Email is required.' });
+      return res.status(400).json({ error: 'Please enter your email address.' });
     }
 
     const token = await UserStore.createResetToken(email);
@@ -147,7 +147,7 @@ router.post('/forgot-password', async (req, res) => {
     res.json(response);
   } catch (err) {
     console.error('[Forgot Password Error]', err);
-    res.status(500).json({ error: 'Could not process reset request. Please try again.' });
+    res.status(500).json({ error: 'We couldn\'t process your request. Please try again or contact support.' });
   }
 });
 
@@ -156,10 +156,10 @@ router.post('/reset-password', async (req, res) => {
     const { token, password } = req.body;
 
     if (!token || !password) {
-      return res.status(400).json({ error: 'Reset token and new password are required.' });
+      return res.status(400).json({ error: 'Reset link and new password are required. Please try the password reset process again.' });
     }
     if (password.length < 8) {
-      return res.status(400).json({ error: 'Password must be at least 8 characters.' });
+      return res.status(400).json({ error: 'Your new password must be at least 8 characters long.' });
     }
 
     const user = await UserStore.resetPasswordWithToken(token, password);
@@ -170,14 +170,14 @@ router.post('/reset-password', async (req, res) => {
     res.json({ message: 'Password updated successfully. You can sign in now.' });
   } catch (err) {
     console.error('[Reset Password Error]', err);
-    res.status(500).json({ error: 'Could not reset password. Please try again.' });
+    res.status(500).json({ error: 'We couldn\'t update your password. Please try again or request a new reset link.' });
   }
 });
 
 router.get('/me', authenticateToken, (req, res) => {
   const user = UserStore.findById(req.user.id);
   if (!user) {
-    return res.status(404).json({ error: 'User not found.' });
+    return res.status(404).json({ error: 'Your account could not be found. Please sign in again.' });
   }
   res.json({ user });
 });

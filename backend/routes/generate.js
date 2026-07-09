@@ -194,14 +194,14 @@ function wrap(handler) {
         sendSse(res, 'error', { error: err.message });
         return res.end();
       }
-      res.status(500).json({ error: err.message || 'Generation failed.' });
+      res.status(500).json({ error: err.message || 'Generation didn\'t complete successfully. Please try again.' });
     }
   };
 }
 
 router.post('/sermon/quick', wrap(async (req, res) => {
   const { topic, scripture, occasion, duration, context } = req.body;
-  if (!topic) return res.status(400).json({ error: 'Topic is required.' });
+  if (!topic) return res.status(400).json({ error: 'Please enter a sermon topic or scripture reference.' });
   const promptData = prompts.sermonQuick({ topic, scripture, occasion, duration, context });
   await runGeneration({
     req, res, feature: 'sermon',
@@ -215,7 +215,7 @@ router.post('/sermon/quick', wrap(async (req, res) => {
 
 router.post('/sermon/deep', wrap(async (req, res) => {
   const { step, topic, scripture, occasion, previousSteps } = req.body;
-  if (!topic || !step) return res.status(400).json({ error: 'Topic and step are required.' });
+  if (!topic || !step) return res.status(400).json({ error: 'Please enter a sermon topic and select a step.' });
   const promptData = prompts.sermonDeepStep({ step, topic, scripture, occasion, previousSteps });
   await runGeneration({
     req, res, feature: 'sermon',
@@ -229,7 +229,7 @@ router.post('/sermon/deep', wrap(async (req, res) => {
 
 router.post('/devotional', wrap(async (req, res) => {
   const { topic, scripture, audience, length } = req.body;
-  if (!topic) return res.status(400).json({ error: 'Topic is required.' });
+  if (!topic) return res.status(400).json({ error: 'Please enter a devotional topic.' });
   const promptData = prompts.devotional({ topic, scripture, audience, length });
   await runGeneration({
     req, res, feature: 'devotional',
@@ -243,7 +243,7 @@ router.post('/devotional', wrap(async (req, res) => {
 
 router.post('/whatsapp', wrap(async (req, res) => {
   const { topic, purpose, audience, tone } = req.body;
-  if (!topic) return res.status(400).json({ error: 'Topic is required.' });
+  if (!topic) return res.status(400).json({ error: 'Please enter a topic for your WhatsApp message.' });
   const promptData = prompts.whatsapp({ topic, purpose, audience, tone });
   await runGeneration({
     req, res, feature: 'whatsapp',
@@ -258,7 +258,7 @@ router.post('/whatsapp', wrap(async (req, res) => {
 
 router.post('/bible-study', wrap(async (req, res) => {
   const { passage, theme, sessions, audience } = req.body;
-  if (!passage) return res.status(400).json({ error: 'Passage is required.' });
+  if (!passage) return res.status(400).json({ error: 'Please enter a Bible passage to study.' });
   const promptData = prompts.bibleStudy({ passage, theme, sessions, audience });
   await runGeneration({
     req, res, feature: 'bible-study',
@@ -272,7 +272,7 @@ router.post('/bible-study', wrap(async (req, res) => {
 
 router.post('/social', wrap(async (req, res) => {
   const { topic, scripture, platform, count } = req.body;
-  if (!topic) return res.status(400).json({ error: 'Topic is required.' });
+  if (!topic) return res.status(400).json({ error: 'Please enter a topic for your social media post.' });
   const promptData = prompts.socialMedia({ topic, scripture, platform, count });
   await runGeneration({
     req, res, feature: 'social',
@@ -286,7 +286,7 @@ router.post('/social', wrap(async (req, res) => {
 
 router.post('/prayer', wrap(async (req, res) => {
   const { topic, type, audience, length } = req.body;
-  if (!topic) return res.status(400).json({ error: 'Topic is required.' });
+  if (!topic) return res.status(400).json({ error: 'Please enter a topic for your prayer.' });
   const promptData = prompts.prayer({ topic, type, audience, length });
   await runGeneration({
     req, res, feature: 'prayer',

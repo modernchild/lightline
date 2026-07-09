@@ -89,12 +89,12 @@ async function generate({
 
       if (!res.ok) {
         const errBody = await res.text();
-        throw new Error(`OpenRouter ${res.status}: ${errBody}`);
+        throw new Error(`We couldn't reach the AI service. Please try again in a moment.`);
       }
 
       const data = await res.json();
       const text = data.choices?.[0]?.message?.content;
-      if (!text) throw new Error('OpenRouter returned no content.');
+      if (!text) throw new Error('The AI service returned an incomplete response. Please try again.');
 
       return {
         content: text,

@@ -10,14 +10,14 @@ router.get('/conversations', (req, res) => {
 
 router.delete('/conversations/:id', (req, res) => {
   if (!db.deleteConversation(req.params.id, req.user.id)) {
-    return res.status(404).json({ error: 'Conversation not found.' });
+    return res.status(404).json({ error: 'This conversation couldn\'t be found. It may have been deleted.' });
   }
   res.json({ success: true });
 });
 
 router.delete('/conversations/:id/messages', (req, res) => {
   if (!db.deleteConversationMessages(req.params.id, req.user.id)) {
-    return res.status(404).json({ error: 'Conversation not found.' });
+    return res.status(404).json({ error: 'This conversation couldn\'t be found. It may have been deleted.' });
   }
   res.json({ success: true, message: 'Memory cleared for this conversation.' });
 });
@@ -29,13 +29,13 @@ router.delete('/all', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const item = db.getGeneration(req.params.id, req.user.id);
-  if (!item) return res.status(404).json({ error: 'Not found.' });
+  if (!item) return res.status(404).json({ error: 'This item couldn\'t be found. It may have been deleted.' });
   res.json({ success: true, item });
 });
 
 router.delete('/:id', (req, res) => {
   if (!db.deleteGeneration(req.params.id, req.user.id)) {
-    return res.status(404).json({ error: 'Not found.' });
+    return res.status(404).json({ error: 'This item couldn\'t be found. It may have been deleted.' });
   }
   res.json({ success: true });
 });

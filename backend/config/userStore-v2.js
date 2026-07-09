@@ -48,7 +48,7 @@ const UserStore = {
 
     if (error) {
       console.error('[UserStore Create Error]', error);
-      throw new Error('Failed to create user account.');
+      throw new Error('We couldn\'t create your account. Please try again or contact support.' );
     }
 
     return UserStore.sanitize(user);
@@ -159,7 +159,7 @@ const UserStore = {
 
     if (error) {
       console.error('[UserStore Update Error]', error);
-      throw new Error('Failed to update user profile.');
+      throw new Error('We couldn\'t update your profile. Please try again.' );
     }
 
     return UserStore.sanitize(user);

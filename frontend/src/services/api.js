@@ -26,7 +26,7 @@ async function request(path, options = {}) {
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.error || `Request failed (${res.status})`);
+    throw new Error(data.error || `We encountered a problem (${res.status}). Please check your connection and try again.`);
   }
 
   return data;
@@ -65,7 +65,7 @@ export async function generateStream(path, body, onChunk, options = {}) {
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || `Request failed (${res.status})`);
+    throw new Error(err.error || `We couldn't complete your request (${res.status}). Please check your connection and try again.`);
   }
 
   const reader = res.body.getReader();
@@ -92,11 +92,11 @@ export async function generateStream(path, body, onChunk, options = {}) {
       const parsed = JSON.parse(dataLine);
       if (event === 'chunk' && parsed.content) onChunk(parsed.content);
       if (event === 'done') finalData = parsed;
-      if (event === 'error') throw new Error(parsed.error || 'Stream failed');
+      if (event === 'error') throw new Error(parsed.error || 'The generation was interrupted. Please try again.');
     }
   }
 
-  if (!finalData) throw new Error('No completion received.');
+  if (!finalData) throw new Error('We didn\'t receive a complete response. Please try again.');
   return finalData;
 }
 

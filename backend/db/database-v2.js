@@ -26,7 +26,7 @@ const DatabaseV2 = {
 
     if (error) {
       console.error('[Conversation Create Error]', error);
-      throw new Error('Failed to create conversation.');
+      throw new Error('We couldn\'t create your conversation. Please try again.' );
     }
 
     return {
@@ -213,7 +213,7 @@ const DatabaseV2 = {
 
     if (error) {
       console.error('[Generation Save Error]', error);
-      throw new Error('Failed to save generation.');
+      throw new Error('We couldn\'t save your content. Please try generating again.' );
     }
 
     return data;

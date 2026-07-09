@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  message: { error: 'Too many requests. Please wait and try again.' },
+  message: { error: 'You\'ve made too many requests. Please wait a few minutes and try again.' },
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -48,7 +48,7 @@ app.use(globalLimiter);
 const generateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
-  message: { error: 'Generation limit reached. Please wait a few minutes.' },
+  message: { error: 'You\'ve used your generation limit for now. Please wait a few minutes before generating more content.' },
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -73,7 +73,7 @@ app.use('/api/models', authenticateToken, modelsRoutes);
 
 // ── 404 handler ────────────────────────────────
 app.use((req, res) => {
-  res.status(404).json({ error: `Route ${req.method} ${req.path} not found.` });
+  res.status(404).json({ error: `The endpoint you're looking for doesn't exist. Please check the URL and try again.` });
 });
 
 // ── Global error handler ───────────────────────
@@ -81,7 +81,7 @@ app.use((err, req, res, next) => {
   console.error('[Error]', err.message);
   const status = err.status || 500;
   res.status(status).json({
-    error: err.message || 'An unexpected error occurred.',
+    error: status === 500 ? 'Something went wrong on our end. Please try again.' : (err.message || 'An unexpected error occurred.'),
   });
 });
 
